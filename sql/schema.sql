@@ -1,0 +1,18 @@
+CREATE EXTENSION IF NOT EXISTS vector;
+
+CREATE TABLE documents (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title TEXT NOT NULL,
+    department TEXT NOT NULL,
+    url TEXT NOT NULL,
+    access_level TEXT NOT NULL,
+    year TEXT NOT NULL
+);
+
+CREATE TABLE chunks (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    document_id BIGINT NOT NULL REFERENCES documents(id),
+    page INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    embedding VECTOR
+);
