@@ -96,3 +96,20 @@ removed, provided the volume itself is retained.
 - The database accepts connections.
 - The `vector` extension is enabled.
 - Python connects through Psycopg and successfully runs `SELECT 1;`.
+
+## PDF extraction checks
+
+The Docling parser returns text paired with PDF page numbers.
+
+- Financial Aid Guide: 8 page records; pages 1, 2, and 4 checked.
+- Student Handbook: 62 page records; page 4 checked.
+- Undergraduate Catalog: 327 page records; CSCI 160 and CSCI 161
+  entries on page 199 checked.
+
+Known limitation: catalog page 84 has table extraction errors.
+The total credit value is separated from its label, and some credit
+values are missing in the default output. Disabling cell matching or
+table reconstruction did not fully resolve this.
+
+Page counts and successful conversion do not prove complete extraction.
+Page 84 requires further handling before supporting answers from its tables.
