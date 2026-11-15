@@ -113,3 +113,22 @@ table reconstruction did not fully resolve this.
 
 Page counts and successful conversion do not prove complete extraction.
 Page 84 requires further handling before supporting answers from its tables.
+
+## Text chunking
+
+Extracted pages are split independently into chunks of up to 500
+tokens, with a target overlap of 50 tokens between neighboring chunks.
+Token counting uses tiktoken for text-embedding-3-small.
+
+Each chunk retains its PDF page number. Chunks do not cross pages.
+
+Checks completed:
+- Short text produces one chunk.
+- A small example preserves overlap.
+- Separate pages retain their page numbers.
+- The Financial Aid Guide produces 13 chunks from 8 pages.
+- Its largest chunk measures 500 tokens.
+- Page 3's neighboring chunks share the expected 50-token overlap.
+
+Fixed token boundaries can split sentences. Chunking does not repair
+PDF extraction errors, including the catalog page 84 table limitation.
