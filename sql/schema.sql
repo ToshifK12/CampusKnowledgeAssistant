@@ -4,7 +4,7 @@ CREATE TABLE documents (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title TEXT NOT NULL,
     department TEXT NOT NULL,
-    url TEXT NOT NULL,
+    url TEXT NOT NULL CONSTRAINT documents_url_unique UNIQUE,
     access_level TEXT NOT NULL,
     year TEXT NOT NULL
 );

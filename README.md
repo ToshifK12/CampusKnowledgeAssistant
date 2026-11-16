@@ -132,3 +132,31 @@ Checks completed:
 
 Fixed token boundaries can split sentences. Chunking does not repair
 PDF extraction errors, including the catalog page 84 table limitation.
+
+## Document ingestion
+
+With Docker Desktop and campus-db running, activate the virtual
+environment and run:
+
+    python ingest.py
+
+The script reads data/document_inventory.md, processes the listed PDFs,
+and stores document metadata and page-labeled chunks in Postgres.
+Database credentials are read from the local, uncommitted .env file.
+
+Repeat runs reuse documents by source URL and replace their chunks.
+Each document's database replacement runs in one transaction.
+
+Verified ingestion:
+- Undergraduate Catalog: 787 chunks.
+- Student Handbook: 169 chunks.
+- Financial Aid Guide: 13 chunks.
+- Total: 969 chunks.
+
+Checks confirmed valid source links, positive page numbers, nonempty
+text, and no catalog page 84 chunks. A stored CSCI 161 passage retained
+its prerequisite and correct page-199 citation details.
+
+Catalog page 84 is explicitly excluded because of known extraction
+errors. Other extraction warnings remain; these checks do not establish
+complete content accuracy. Embeddings have not been generated yet.
