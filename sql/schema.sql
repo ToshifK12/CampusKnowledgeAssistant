@@ -14,5 +14,5 @@ CREATE TABLE chunks (
     document_id BIGINT NOT NULL REFERENCES documents(id),
     page INTEGER NOT NULL,
     text TEXT NOT NULL,
-    embedding VECTOR
+    embedding VECTOR(1536)
 );

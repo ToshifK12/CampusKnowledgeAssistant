@@ -14,6 +14,9 @@ The FastAPI backend runs locally. Its welcome endpoint returns:
 
 Document search and question answering are not implemented yet.
 
+Three university documents have been ingested into 969 page-labeled
+chunks. All chunks have 1,536-dimensional embeddings stored in Postgres.
+
 ## Local setup
 
 You need Python 3 installed. Open a terminal in the project folder.
@@ -159,4 +162,32 @@ its prerequisite and correct page-199 citation details.
 
 Catalog page 84 is explicitly excluded because of known extraction
 errors. Other extraction warnings remain; these checks do not establish
-complete content accuracy. Embeddings have not been generated yet.
+complete content accuracy.
+
+## Embeddings
+
+All 969 stored chunks have embeddings generated with
+text-embedding-3-small, using 1,536 dimensions.
+
+The embedding script selects only chunks whose embedding is NULL.
+
+Preview pending work without API requests or database updates:
+
+    python embed_chunks.py --limit 1
+
+Generate and save embeddings for up to N pending chunks:
+
+    python embed_chunks.py --limit N --write
+
+Write mode sends passage text to OpenAI and incurs API charges.
+Each successful save is committed separately, allowing interrupted
+runs to resume by skipping completed chunks. Run one copy at a time.
+
+Verification: 969 embedded chunks, 0 pending, and all vectors have
+1,536 dimensions.
+
+Important: ingest.py currently replaces document chunks, discarding
+their existing embeddings. Re-ingestion therefore requires embedding
+the replacement chunks again.
+
+Semantic search has not been implemented yet.
