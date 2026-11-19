@@ -191,3 +191,24 @@ their existing embeddings. Re-ingestion therefore requires embedding
 the replacement chunks again.
 
 Semantic search has not been implemented yet.
+
+## Semantic search
+
+semantic_search(question, limit=20) embeds a question using
+text-embedding-3-small and retrieves nearby passage vectors from
+Postgres using cosine distance. Lower distances rank first.
+
+Results include chunk ID, document ID, title, PDF page, source URL,
+passage text, and distance.
+
+An HNSW index supports cosine-distance search. Its definition is
+verified; actual index use by the query planner has not been checked.
+
+Manual check:
+- "How do I drop a class?" returned 20 results.
+- The relevant Dropping Courses passage from catalog page 22 ranked second.
+- Distances were sorted and citation fields were present.
+
+Search retrieves passages; it does not generate a final answer.
+Each search makes a paid API request to embed the question.
+Relevance is not guaranteed by vector distance alone.
