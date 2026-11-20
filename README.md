@@ -212,3 +212,28 @@ Manual check:
 Search retrieves passages; it does not generate a final answer.
 Each search makes a paid API request to embed the question.
 Relevance is not guaranteed by vector distance alone.
+
+## Keyword search
+
+keyword_search(query, limit=20) uses PostgreSQL full-text search.
+
+A stored generated search_vector column processes each passage with
+the simple configuration and updates automatically when its text changes.
+A GIN index supports term matching.
+
+Queries use plainto_tsquery and results are ranked by ts_rank,
+highest score first. All query terms must match, but they do not
+need to be adjacent. This is not exact phrase matching.
+
+Results include passage text, source title, URL, PDF page, IDs,
+and a text-match score. No OpenAI API request is needed.
+
+Manual checks:
+- CSCI 160 returned 20 results.
+- Its course description appeared at rank 5 on catalog page 199.
+- Scores were descending and citation fields were present.
+- CSCI 999999 returned an empty list.
+
+The GIN index definition is verified; query-plan usage has not
+been checked. Ranking does not guarantee answer quality.
+Semantic and keyword results are not combined yet.

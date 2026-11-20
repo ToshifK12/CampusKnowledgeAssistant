@@ -14,8 +14,13 @@ CREATE TABLE chunks (
     document_id BIGINT NOT NULL REFERENCES documents(id),
     page INTEGER NOT NULL,
     text TEXT NOT NULL,
-    embedding VECTOR(1536)
+    embedding VECTOR(1536),
+    search_vector TSVECTOR
+    GENERATED ALWAYS AS (to_tsvector('simple', text)) STORED
 );
 
 CREATE INDEX chunks_embedding_hnsw
 ON chunks USING hnsw (embedding vector_cosine_ops);
+
+CREATE INDEX chunks_search_vector_gin
+ON chunks USING gin (search_vector);
