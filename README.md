@@ -237,3 +237,31 @@ Manual checks:
 The GIN index definition is verified; query-plan usage has not
 been checked. Ranking does not guarantee answer quality.
 Semantic and keyword results are not combined yet.
+
+## Hybrid search
+
+hybrid_search combines semantic and keyword rankings using
+Reciprocal Rank Fusion (RRF), with a starting rank constant of 60.
+
+Each search returns up to 20 candidates by default. RRF adds
+1 / (60 + rank) for each list containing a chunk, merges by chunk ID,
+and returns up to 20 unique passages with citation details and source ranks.
+Higher RRF scores rank first.
+
+Fusion checks passed for shared chunks, an empty search list,
+and two empty lists.
+
+Manual retrieval checks:
+- CSCI 160: the course description remained at rank 5, catalog page 199.
+- How do I drop a class?: the relevant catalog page 22 passage moved
+  from semantic rank 2 to hybrid rank 3.
+- The first hybrid result discussed related topics rather than directly
+  explaining voluntary course dropping.
+
+These checks do not establish an improvement over individual searches.
+Keyword term matching can promote passages that do not match intent.
+Broader evaluation and later reranking are still needed.
+
+Calling hybrid_search makes one paid API request to embed the query
+and reads Postgres. Fusion itself makes no API requests.
+Answer generation is not implemented yet.
