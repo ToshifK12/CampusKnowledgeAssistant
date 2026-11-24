@@ -265,3 +265,24 @@ Broader evaluation and later reranking are still needed.
 Calling hybrid_search makes one paid API request to embed the query
 and reads Postgres. Fusion itself makes no API requests.
 Answer generation is not implemented yet.
+
+## Search API
+
+POST /search accepts a JSON body containing:
+- question: a nonblank string, maximum 2,000 characters.
+- limit: a strict integer from 1 to 100, default 20.
+
+It returns the question, result count, and ranked passages with
+source titles, PDF pages, URLs, text, RRF scores, and source ranks.
+
+Verified through /docs:
+- A whitespace-only question returned HTTP 422.
+- CSCI 160 with limit 5 returned HTTP 200 and five passages.
+- All five results included source details and passage text.
+
+Valid searches make a paid embedding request and read Postgres.
+They do not modify stored data or generate a final answer.
+
+Handlers are implemented for embedding-service and database errors,
+but those failure paths have not been tested yet.
+Authentication and role filtering are not implemented yet.
