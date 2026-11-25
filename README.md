@@ -286,3 +286,24 @@ They do not modify stored data or generate a final answer.
 Handlers are implemented for embedding-service and database errors,
 but those failure paths have not been tested yet.
 Authentication and role filtering are not implemented yet.
+
+## Page-attribution correction
+
+Docling merged some cross-page paragraphs during full-document
+conversion. Page-filtered exports could include text from another page.
+Character-span slicing was unsuitable because some recorded offsets
+did not match the text length.
+
+The parser now converts individual pages separately after obtaining
+the page list. This is slower and does not fix table-extraction errors.
+
+Verified handbook boundaries: PDF pages 14–15 and 27–28.
+Only the handbook was refreshed in Postgres:
+- Catalog: 787 chunks, unchanged.
+- Handbook: 167 corrected chunks.
+- Financial Aid Guide: 13 chunks, unchanged.
+- Current total: 967 chunks, all embedded with 1,536 dimensions.
+
+Catalog and Financial Aid Guide records still use the earlier extraction.
+The ten-query evaluation remains a historical baseline from before
+this correction; its rankings have not been re-evaluated.
