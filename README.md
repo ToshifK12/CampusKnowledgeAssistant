@@ -307,3 +307,27 @@ Only the handbook was refreshed in Postgres:
 Catalog and Financial Aid Guide records still use the earlier extraction.
 The ten-query evaluation remains a historical baseline from before
 this correction; its rankings have not been re-evaluated.
+
+## Answer prompt and citation preparation
+
+app/answer_prompt.py contains source-only answer instructions and
+helpers for preparing up to five selected passages.
+
+prepare_sources assigns request-local labels such as S1 and builds
+a lookup containing the supplied source metadata.
+
+resolve_citations maps source IDs to that metadata, rejects unknown
+IDs, and removes repeated citation IDs.
+
+Checks passed:
+- A sample passage received S1 and matching lookup details.
+- Duplicate input chunks were rejected.
+- Empty passages produced empty source content and lookup.
+- Repeated citation IDs resolved to one citation.
+- Unknown citation IDs were rejected.
+- An empty citation list returned an empty list.
+- Stored catalog chunk 467 resolved to its actual title, page 199,
+  and source URL.
+
+Recognized IDs do not prove that cited passages support the claims.
+Answer-level validation and model answer generation are not implemented yet.
